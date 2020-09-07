@@ -20,31 +20,33 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="个人学习笔记">
-<meta property="og:type" content="website">
-<meta property="og:title" content="点滴">
-<meta property="og:url" content="http://example.com/index.html">
+  <meta name="description" content="1. 可变参数相关的宏首先先了解几个宏： 1234typedef __gnuc_va_list va_list;#define va_start(v,l)  __builtin_va_start(v,l)#define va_end(v)  __builtin_va_end(v)#define va_arg(v,l)    __builtin_va_arg(v,l) 这几个宏可以在stdarg.h">
+<meta property="og:type" content="article">
+<meta property="og:title" content="可变参数函数">
+<meta property="og:url" content="http://example.com/2020/09/07/%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0%E5%87%BD%E6%95%B0/index.html">
 <meta property="og:site_name" content="点滴">
-<meta property="og:description" content="个人学习笔记">
+<meta property="og:description" content="1. 可变参数相关的宏首先先了解几个宏： 1234typedef __gnuc_va_list va_list;#define va_start(v,l)  __builtin_va_start(v,l)#define va_end(v)  __builtin_va_end(v)#define va_arg(v,l)    __builtin_va_arg(v,l) 这几个宏可以在stdarg.h">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-09-07T11:35:21.000Z">
+<meta property="article:modified_time" content="2020-09-07T11:37:25.184Z">
 <meta property="article:author" content="QueJing">
 <meta property="article:tag" content="学习笔记, C, Java">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://example.com/">
+<link rel="canonical" href="http://example.com/2020/09/07/%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0%E5%87%BD%E6%95%B0/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : true,
-    isPost : false,
+    isHome : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>点滴</title>
+  <title>可变参数函数 | 点滴</title>
   
 
 
@@ -142,9 +144,10 @@
         <div class="content-wrap">
           
 
-          <div class="content index posts-expand">
+          <div class="content post posts-expand">
             
-      
+
+    
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
@@ -160,10 +163,9 @@
       <meta itemprop="name" content="点滴">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/09/07/%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0%E5%87%BD%E6%95%B0/" class="post-title-link" itemprop="url">可变参数函数</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          可变参数函数
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
@@ -196,7 +198,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="1-可变参数相关的宏"><a href="#1-可变参数相关的宏" class="headerlink" title="1. 可变参数相关的宏"></a>1. 可变参数相关的宏</h2><p>首先先了解几个宏：</p>
+        <h2 id="1-可变参数相关的宏"><a href="#1-可变参数相关的宏" class="headerlink" title="1. 可变参数相关的宏"></a>1. 可变参数相关的宏</h2><p>首先先了解几个宏：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> __gnuc_va_list va_list;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> va_start(v,l)  __builtin_va_start(v,l)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> va_end(v)  __builtin_va_end(v)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> va_arg(v,l)    __builtin_va_arg(v,l)</span></span><br></pre></td></tr></table></figure>
 <p>这几个宏可以在stdarg.h中找到。va是variable-argument的缩写，方便记忆。<br>va_list继续追踪为：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> __builtin_va_list __gnuc_va_list;</span><br></pre></td></tr></table></figure>
@@ -223,110 +225,30 @@
 <li>编译器只通过地址和类型获取对应的值，而不能保证这个值是否为你传递的参数。上面例子的第一条打印结果就显示了这个问题：传递了两个参数，读取三个参数，但第三个参数并不是你要传递的。</li>
 </ul>
 
-      
     </div>
 
     
     
     
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/09/07/DEVICE-ATTR%E4%BD%BF%E7%94%A8/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="QueJing">
-      <meta itemprop="description" content="个人学习笔记">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/09/07/DEVICE-ATTR%E4%BD%BF%E7%94%A8/" class="post-title-link" itemprop="url">DEVICE_ATTR使用</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-09-07 18:17:21 / 修改时间：19:37:32" itemprop="dateCreated datePublished" datetime="2020-09-07T18:17:21+08:00">2020-09-07</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="1-作用"><a href="#1-作用" class="headerlink" title="1. 作用"></a>1. 作用</h2><p>使用DEVICE_ATTR往sysfs中为device添加“属性文件”，并对该文件添加相关操作，从而实现运行过程中动态控制device。</p>
-<h2 id="2-一些定义"><a href="#2-一些定义" class="headerlink" title="2. 一些定义"></a>2. 一些定义</h2><p>首先看一下与DEVICE_ATTR相关的宏定义，定义位置在kernel/include/linux/device.h中。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> DEVICE_ATTR(_name, _mode, _show, _store) \</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">device_attribute</span> <span class="title">dev_attr_</span>##_<span class="title">name</span> = __<span class="title">ATTR</span>(_<span class="title">name</span>, _<span class="title">mode</span>, _<span class="title">show</span>, _<span class="title">store</span>)</span></span><br></pre></td></tr></table></figure>
-<p>DEVICE_ATTR宏定义中又引用了__ATTR宏定义，__ATTR定义在kernel/include/linux/sysfs.h中。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> __ATTR(_name, _mode, _show, _store) &#123;              \</span></span><br><span class="line">    .attr = &#123;.name = __stringify(_name),                \</span><br><span class="line">         .mode = VERIFY_OCTAL_PERMISSIONS(_mode) &#125;,     \</span><br><span class="line">    .show   = _show,                        \</span><br><span class="line">    .store  = _store,                       \</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>再看看struct device_attribute的定义，该结构体定义在kernel/include/linux/device.h中。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">device_attribute</span> &#123;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">attribute</span>    <span class="title">attr</span>;</span></span><br><span class="line">    <span class="keyword">ssize_t</span> (*show)(struct device *dev, struct device_attribute *attr,</span><br><span class="line">            <span class="keyword">char</span> *buf);</span><br><span class="line">    <span class="keyword">ssize_t</span> (*store)(struct device *dev, struct device_attribute *attr,</span><br><span class="line">             <span class="keyword">const</span> <span class="keyword">char</span> *buf, <span class="keyword">size_t</span> count);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<p>在DEVICE_ATTR中的四个参数含义为：</p>
-<ul>
-<li>_name：在sysfs中生产的文件名称</li>
-<li>_mode: 该文件具有的权限，与普通文件相同，UGO格式，如：0444只读、0666可读写</li>
-<li>_show: 当cat命令作用于该文件时调用该函数</li>
-<li>_store: 当echo数据到该文件时调用该函数</li>
-</ul>
-<p>通过阅读相关宏定义，利用DEVICE_ATTR后会生成一个device_attribute结构体，例如：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">调用</span><br><span class="line">DEVICE_ATTR(test, <span class="number">0666</span>, show_fun, store_fun);</span><br><span class="line">生成下面的结构体</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">device_attribute</span> <span class="title">dev_attr_test</span>=&#123;</span></span><br><span class="line">    .attr=&#123;.name = <span class="string">&quot;test&quot;</span>,</span><br><span class="line">        .mode = <span class="number">0666</span> &#125;,</span><br><span class="line">    .show = show_func,</span><br><span class="line">    .store = store_func,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="3-使用"><a href="#3-使用" class="headerlink" title="3. 使用"></a>3. 使用</h2><p>当定义好device_attribute结构体后，即可使用device_create_file()函数为设备创建这个属性文件。device_create_file的函数原型如下：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">device_create_file</span><span class="params">(struct device *dev, <span class="keyword">const</span> struct device_attribute *attr)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> error = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (dev)</span><br><span class="line">    error = sysfs_create_file(&amp;dev-&gt;kobj, &amp;attr-&gt;attr);</span><br><span class="line">    <span class="keyword">return</span> error;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>使用示例如下：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">device_create_file(&amp;pdev-&gt;dev, &amp;dev_attr_test);</span><br></pre></td></tr></table></figure>
+        
 
 
-      
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/09/07/DEVICE-ATTR%E4%BD%BF%E7%94%A8/" rel="prev" title="DEVICE_ATTR使用">
+      <i class="fa fa-chevron-left"></i> DEVICE_ATTR使用
+    </a></div>
+      <div class="post-nav-item"></div>
     </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
       </footer>
+    
   </article>
   
   
-  
-
-
   
 
 
@@ -379,6 +301,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0%E7%9B%B8%E5%85%B3%E7%9A%84%E5%AE%8F"><span class="nav-number">1.</span> <span class="nav-text">1. 可变参数相关的宏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0%E8%8E%B7%E5%8F%96%E5%8E%9F%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">2. 可变参数获取原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0%E5%87%BD%E6%95%B0%E7%A4%BA%E4%BE%8B"><span class="nav-number">3.</span> <span class="nav-text">3. 可变参数函数示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">4.</span> <span class="nav-text">4. 注意事项</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

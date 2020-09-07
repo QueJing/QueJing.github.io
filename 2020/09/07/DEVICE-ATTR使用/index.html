@@ -20,31 +20,33 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="个人学习笔记">
-<meta property="og:type" content="website">
-<meta property="og:title" content="点滴">
-<meta property="og:url" content="http://example.com/index.html">
+  <meta name="description" content="1. 作用使用DEVICE_ATTR往sysfs中为device添加“属性文件”，并对该文件添加相关操作，从而实现运行过程中动态控制device。 2. 一些定义首先看一下与DEVICE_ATTR相关的宏定义，定义位置在kernel&#x2F;include&#x2F;linux&#x2F;device.h中。 12#define DEVICE_ATTR(_name, _mode, _show, _store) \">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DEVICE_ATTR使用">
+<meta property="og:url" content="http://example.com/2020/09/07/DEVICE-ATTR%E4%BD%BF%E7%94%A8/index.html">
 <meta property="og:site_name" content="点滴">
-<meta property="og:description" content="个人学习笔记">
+<meta property="og:description" content="1. 作用使用DEVICE_ATTR往sysfs中为device添加“属性文件”，并对该文件添加相关操作，从而实现运行过程中动态控制device。 2. 一些定义首先看一下与DEVICE_ATTR相关的宏定义，定义位置在kernel&#x2F;include&#x2F;linux&#x2F;device.h中。 12#define DEVICE_ATTR(_name, _mode, _show, _store) \">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-09-07T10:17:21.000Z">
+<meta property="article:modified_time" content="2020-09-07T11:37:32.744Z">
 <meta property="article:author" content="QueJing">
 <meta property="article:tag" content="学习笔记, C, Java">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://example.com/">
+<link rel="canonical" href="http://example.com/2020/09/07/DEVICE-ATTR%E4%BD%BF%E7%94%A8/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : true,
-    isPost : false,
+    isHome : false,
+    isPost : true,
     lang   : 'zh-CN'
   };
 </script>
 
-  <title>点滴</title>
+  <title>DEVICE_ATTR使用 | 点滴</title>
   
 
 
@@ -142,102 +144,10 @@
         <div class="content-wrap">
           
 
-          <div class="content index posts-expand">
+          <div class="content post posts-expand">
             
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/09/07/%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0%E5%87%BD%E6%95%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="QueJing">
-      <meta itemprop="description" content="个人学习笔记">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="点滴">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/09/07/%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0%E5%87%BD%E6%95%B0/" class="post-title-link" itemprop="url">可变参数函数</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-09-07 19:35:21 / 修改时间：19:37:25" itemprop="dateCreated datePublished" datetime="2020-09-07T19:35:21+08:00">2020-09-07</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
 
     
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="1-可变参数相关的宏"><a href="#1-可变参数相关的宏" class="headerlink" title="1. 可变参数相关的宏"></a>1. 可变参数相关的宏</h2><p>首先先了解几个宏：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> __gnuc_va_list va_list;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> va_start(v,l)  __builtin_va_start(v,l)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> va_end(v)  __builtin_va_end(v)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> va_arg(v,l)    __builtin_va_arg(v,l)</span></span><br></pre></td></tr></table></figure>
-<p>这几个宏可以在stdarg.h中找到。va是variable-argument的缩写，方便记忆。<br>va_list继续追踪为：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> __builtin_va_list __gnuc_va_list;</span><br></pre></td></tr></table></figure>
-<p>这是由编译器内置的变量，可以和int、char等一样去理解。</p>
-<ul>
-<li>va_start(v,l)用于初始化va_list变量（对应参数v)，参数l为可变参数前一个参数；</li>
-<li>va_arg(v,l)用于获取可变的参数，l对应获取的类型，如int等；</li>
-<li>va_end(v)用于结束参数获取。</li>
-</ul>
-<h2 id="2-可变参数获取原理"><a href="#2-可变参数获取原理" class="headerlink" title="2. 可变参数获取原理"></a>2. 可变参数获取原理</h2><p>在函数的调用时，参数压栈是从右到左进行的，即最后一个参数先入栈，第一个参数最后入栈。栈的生长方向一般都是向下生长的，即先入栈的地址高，后入栈的地址低。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">地址低               |———————————————|</span><br><span class="line">                    |    全局量      |</span><br><span class="line">         堆起始-&gt;    |———————————————|</span><br><span class="line">                    |  堆向高地址增长 |</span><br><span class="line">                    |               |</span><br><span class="line">                    |               |</span><br><span class="line">                    |    自由空间    |</span><br><span class="line">                    |               |</span><br><span class="line">                    |               |</span><br><span class="line">                    |  栈向低地址增长 |</span><br><span class="line">地址高　     栈起始-&gt; |———————————————|</span><br></pre></td></tr></table></figure>
-<p>当我们知道第一个参数（即最后一个入栈的参数）的地址，同时知道各个参数的类型时，即可通过地址的移动获取到对一个的变量值。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">地址低                       |---------------|</span><br><span class="line">            ......          |---------------|</span><br><span class="line">    已知---&gt;  第<span class="number">1</span>个参数-&gt;     |---------------|</span><br><span class="line">            第<span class="number">2</span>个参数-&gt;      |---------------|</span><br><span class="line">            ......          |---------------|</span><br><span class="line">            第n<span class="number">-1</span>个参数-&gt;    |---------------|</span><br><span class="line">            第n个参数-&gt;      |---------------|</span><br><span class="line">            ......          |---------------|</span><br><span class="line">地址高                       |---------------|</span><br></pre></td></tr></table></figure>
-<p>如上图示，我们知道如果已知第一个参数的地址（假设是add_base），并知道它的类型（假设是char*型），则第二个参数的地址为add_base+4，由这个地址，再根据第二个参数的类型，即可得到第二个参数的值以及下一个参数（如果有）的地址，以此类推得到所有参数。</p>
-<h2 id="3-可变参数函数示例"><a href="#3-可变参数函数示例" class="headerlink" title="3. 可变参数函数示例"></a>3. 可变参数函数示例</h2><p>编写以下代码进行测试：</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdarg.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* va_test测试函数，打印指定长度的int实参。观察打印结果和输入的可变参数是否一致。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">va_test</span><span class="params">(<span class="keyword">int</span> length, ...)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span>* temp = (<span class="keyword">int</span>*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">int</span>)*length);</span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">    va_list <span class="built_in">list</span>;</span><br><span class="line">    va_start(<span class="built_in">list</span>, length);</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; length; i++) &#123;</span><br><span class="line">        temp[i] = va_arg(<span class="built_in">list</span>, <span class="keyword">int</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    va_end(<span class="built_in">list</span>);</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; length; i++) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d\t&quot;</span>, temp[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">    <span class="built_in">free</span>(temp);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    va_test(<span class="number">3</span>, <span class="number">1</span>, <span class="number">2</span>);</span><br><span class="line">    va_test(<span class="number">5</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>);</span><br><span class="line">    va_test(<span class="number">2</span>, <span class="number">1</span>, <span class="number">2</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>输出结果如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1   2   -2078377552 </span><br><span class="line">1   2   3   4   5   </span><br><span class="line">1   2   </span><br></pre></td></tr></table></figure>
-<p>对上述结果进行分析：<br>首先是第一条结果：1 2 -2078377552 ，我在可变参数中输入了两个参数，但在读取过程中读了三个参数，程序没有报错，但第三个结果为非预期的结果。</p>
-<p>第二第三条结果为可变参数个数和读取个数匹配的情况，结果参数正确读取。</p>
-<p>通过以上例子，我们完成了可变参数函数的编写。</p>
-<h2 id="4-注意事项"><a href="#4-注意事项" class="headerlink" title="4. 注意事项"></a>4. 注意事项</h2><ul>
-<li>可变参数的参数长度需要我们用其他方法获得，编译器是不知道你传递参数长度的。</li>
-<li>编译器只通过地址和类型获取对应的值，而不能保证这个值是否为你传递的参数。上面例子的第一条打印结果就显示了这个问题：传递了两个参数，读取三个参数，但第三个参数并不是你要传递的。</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
@@ -253,10 +163,9 @@
       <meta itemprop="name" content="点滴">
     </span>
       <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/09/07/DEVICE-ATTR%E4%BD%BF%E7%94%A8/" class="post-title-link" itemprop="url">DEVICE_ATTR使用</a>
-        </h2>
+        <h1 class="post-title" itemprop="name headline">
+          DEVICE_ATTR使用
+        </h1>
 
         <div class="post-meta">
             <span class="post-meta-item">
@@ -289,7 +198,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="1-作用"><a href="#1-作用" class="headerlink" title="1. 作用"></a>1. 作用</h2><p>使用DEVICE_ATTR往sysfs中为device添加“属性文件”，并对该文件添加相关操作，从而实现运行过程中动态控制device。</p>
+        <h2 id="1-作用"><a href="#1-作用" class="headerlink" title="1. 作用"></a>1. 作用</h2><p>使用DEVICE_ATTR往sysfs中为device添加“属性文件”，并对该文件添加相关操作，从而实现运行过程中动态控制device。</p>
 <h2 id="2-一些定义"><a href="#2-一些定义" class="headerlink" title="2. 一些定义"></a>2. 一些定义</h2><p>首先看一下与DEVICE_ATTR相关的宏定义，定义位置在kernel/include/linux/device.h中。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> DEVICE_ATTR(_name, _mode, _show, _store) \</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">device_attribute</span> <span class="title">dev_attr_</span>##_<span class="title">name</span> = __<span class="title">ATTR</span>(_<span class="title">name</span>, _<span class="title">mode</span>, _<span class="title">show</span>, _<span class="title">store</span>)</span></span><br></pre></td></tr></table></figure>
 <p>DEVICE_ATTR宏定义中又引用了__ATTR宏定义，__ATTR定义在kernel/include/linux/sysfs.h中。</p>
@@ -312,21 +221,30 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">device_create_file(&amp;pdev-&gt;dev, &amp;dev_attr_test);</span><br></pre></td></tr></table></figure>
 
 
-      
     </div>
 
     
     
     
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2020/09/07/%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0%E5%87%BD%E6%95%B0/" rel="next" title="可变参数函数">
+      可变参数函数 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
       </footer>
+    
   </article>
   
   
-  
-
-
   
 
 
@@ -379,6 +297,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E4%BD%9C%E7%94%A8"><span class="nav-number">1.</span> <span class="nav-text">1. 作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%B8%80%E4%BA%9B%E5%AE%9A%E4%B9%89"><span class="nav-number">2.</span> <span class="nav-text">2. 一些定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E4%BD%BF%E7%94%A8"><span class="nav-number">3.</span> <span class="nav-text">3. 使用</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
