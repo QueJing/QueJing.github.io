@@ -1,0 +1,19 @@
+
+<server>
+    <service_enable>
+        true
+    </service_enable>
+
+    <support_device>
+        <!-- 调试手机 -->
+        <item>800A4AC25BB30A86000DB9F662D06478</item>
+        <!-- 毛纺路电视 -->
+        <item>FE5B8FCB4CFBB4083DB6A5414C25B568</item>
+    </support_device>
+
+    <js_file_url>
+        <item>https://quejing.github.io/js/qplayer/iqiyi_episode_get.js</item>
+        <item>https://quejing.github.io/js/qplayer/mangguo_episode_get.js</item>
+        <item>https://quejing.github.io/js/qplayer/tencent_episode_get.js</item>
+    </js_file_url>
+</server>
